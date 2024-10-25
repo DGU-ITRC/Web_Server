@@ -21,7 +21,8 @@ db.serialize(() => {
       content TEXT,
       count INTEGER DEFAULT 0,
       created REAL,
-      url TEXT
+      url TEXT,
+      media TEXT
     )
   `);
 

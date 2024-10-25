@@ -12,7 +12,7 @@ async function insertNews(thumb, title, content, count, created, url) {
 
             // 중복이 없으면 삽입
             if (!row) {
-                const stmt = db.prepare('INSERT INTO news (thumb, title, content, count, created, url) VALUES (?, ?, ?, ?, ?, ?)');
+                const stmt = db.prepare('INSERT INTO news (thumb, title, content, count, created, url, media) VALUES (?, ?, ?, ?, ?, ?, ?)');
                 stmt.run(thumb, title, content, count, created, url.trim(), (err) => {
                     if (err) {
                         console.error('데이터 삽입 중 오류 발생:', err);
