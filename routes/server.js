@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { getServerState, getServerLogs, updateServerState } = require('../module/serverdb');
+const { getServerState, getServerLogs, updateServerState } = require('../modules/serverdb');
 
 // 서버 상태 조회
 router.get('/state', async (req, res) => {
