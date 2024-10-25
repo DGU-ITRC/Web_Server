@@ -14,6 +14,7 @@ async function crawlNews() {
         const url = `https://search.naver.com/search.naver?where=news&sm=tab_jum&query=${encodeURIComponent(query)}&start=${pageIndex * 10 - 9}`;
 
         await page.goto(url, { waitUntil: 'networkidle2' });
+        await page.waitForSelector('.dsc_thumb img', { visible: true });
 
         const newArticles = await page.evaluate(() => {
             const results = [];
@@ -23,6 +24,7 @@ async function crawlNews() {
                 const title = item.querySelector('.news_tit')?.textContent;
                 let thumb = null;
 
+                /*
                 // 두 번째 img 태그에서 썸네일을 가져옴
                 const imgs = item.querySelectorAll('img');
                 if (imgs.length > 1) {
@@ -33,6 +35,18 @@ async function crawlNews() {
                         if (match) {
                             thumb = match[1];
                         }
+                    }
+                }
+                    */
+                const thumbElement = item.querySelector('.dsc_thumb img');
+                if (thumbElement) {
+                    thumb = thumbElement.src;
+
+                    const match = thumb.match(/(.*\.(jpg|jpeg|png|gif))/i);
+                    if (match) {
+                        thumb = match[1];
+                    } else {
+                        thumb = null;
                     }
                 }
 
