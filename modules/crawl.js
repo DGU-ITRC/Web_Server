@@ -18,8 +18,7 @@ async function crawlNews() {
         const url = `https://search.naver.com/search.naver?where=news&sm=tab_jum&query=${encodeURIComponent(query)}&start=${pageIndex * 10 - 9}`;
 
         await page.goto(url, { waitUntil: 'networkidle2' });
-        await page.waitForSelector('.dsc_thumb img');
-        await new Promise((page) => setTimeout(page, 30000));
+        await page.waitForSelector('.dsc_thumb img', { visible: true });
 
         const newArticles = await page.evaluate(() => {
             const results = [];
