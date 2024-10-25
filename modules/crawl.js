@@ -53,11 +53,17 @@ async function crawlNews() {
                     } else if (relativeTime.includes('분 전')) {
                         const minutesAgo = parseInt(relativeTime.match(/\d+/)?.[0], 10);
                         created = Date.now() - minutesAgo * 60 * 1000;
+                    } else if (relativeTime.includes('초 전')) {
+                        const secondsAgo = parseInt(relativeTime.match(/\d+/)?.[0], 10);
+                        created = Date.now() - secondsAgo * 1000;
                     }
                 }
 
+                // 언론사 이름 가져오기
+                const media = item.querySelector('.info_group > a')?.textContent?.trim();
+
                 if (title && url) {
-                    results.push({ title, thumb, content, url, created });
+                    results.push({ title, thumb, content, url, created, media });
                 }
             });
 
@@ -72,7 +78,7 @@ async function crawlNews() {
 
     for (const article of articles) {
         try {
-            await insertNews(article.thumb, article.title, article.content, 0, article.created, article.url);
+            await insertNews(article.thumb, article.title, article.content, 0, article.created, article.url, article.media);
         } catch (error) {
             console.log(`Insert error: ${article.title}`);
         }
