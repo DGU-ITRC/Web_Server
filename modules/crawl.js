@@ -39,6 +39,36 @@ async function crawlNews() {
                 const content = item.querySelector('.dsc_txt_wrap')?.textContent?.substring(0, 200);
                 const url = item.querySelector('.news_tit')?.href?.trim(); // URL 공백 제거
 
+                // "몇 시간 전" 정보를 여러 info 요소에서 찾아서 필터링
+                const infoElements = item.querySelectorAll('.info');
+                let relativeTime = null;
+
+                infoElements.forEach(infoElement => {
+                    const text = infoElement.innerText;
+                    if (text.includes('일 전') || text.includes('시간 전') || text.includes('분 전') || text.includes('초 전')) {
+                        relativeTime = text;  // 시간 정보가 담긴 요소 찾기
+                    }
+                });
+
+                // 시간 계산
+                let created = Date.now();
+                if (relativeTime) {
+                    if (relativeTime.includes('일 전')) {
+                        const daysAgo = parseInt(relativeTime.match(/\d+/)?.[0], 10);
+                        created = Date.now() - daysAgo * 24 * 60 * 60 * 1000;
+                    } else if (relativeTime.includes('시간 전')) {
+                        const hoursAgo = parseInt(relativeTime.match(/\d+/)?.[0], 10);
+                        created = Date.now() - hoursAgo * 60 * 60 * 1000;
+                    } else if (relativeTime.includes('분 전')) {
+                        const minutesAgo = parseInt(relativeTime.match(/\d+/)?.[0], 10);
+                        created = Date.now() - minutesAgo * 60 * 1000;
+                    } else if (relativeTime.includes('초 전')) {
+                        const secondsAgo = parseInt(relativeTime.match(/\d+/)?.[0], 10);
+                        created = Date.now() - secondsAgo * 1000;
+                    }
+                }
+
+                /*
                 // "몇 시간 전"을 계산해서 created 값을 설정
                 let relativeTime = item.querySelector('.info')?.innerText;
                 let created = Date.now();
@@ -58,6 +88,7 @@ async function crawlNews() {
                         created = Date.now() - secondsAgo * 1000;
                     }
                 }
+                    */
 
                 // 언론사 이름 가져오기
                 const media = item.querySelector('.info_group > a')?.textContent?.trim();
