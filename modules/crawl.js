@@ -1,5 +1,5 @@
 const puppeteer = require('puppeteer');
-const { insertNews } = require('./database'); // 데이터베이스 모듈 호출
+const { insertNews } = require('./newsdb'); // 데이터베이스 모듈 호출
 
 // 크롤링 함수
 async function crawlNews() {
