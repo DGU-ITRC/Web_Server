@@ -12,7 +12,7 @@ async function crawlNews() {
 
     for (let pageIndex = 1; pageIndex <= 10; pageIndex += 1) {
         const url = `https://search.naver.com/search.naver?where=news&sm=tab_jum&query=${encodeURIComponent(query)}&start=${pageIndex * 10 - 9}`;
-        
+
         await page.goto(url, { waitUntil: 'networkidle2' });
 
         const newArticles = await page.evaluate(() => {
@@ -22,7 +22,7 @@ async function crawlNews() {
             items.forEach(item => {
                 const title = item.querySelector('.news_tit')?.textContent;
                 let thumb = null;
-                
+
                 // 두 번째 img 태그에서 썸네일을 가져옴
                 const imgs = item.querySelectorAll('img');
                 if (imgs.length > 1) {
@@ -37,7 +37,7 @@ async function crawlNews() {
                 }
 
                 const content = item.querySelector('.dsc_txt_wrap')?.textContent?.substring(0, 200);
-                const url = item.querySelector('.news_tit')?.href?.trim().toLowerCase(); // URL을 소문자로 변환하고 공백 제거
+                const url = item.querySelector('.news_tit')?.href?.trim(); // URL 공백 제거
 
                 // "몇 시간 전"을 계산해서 created 값을 설정
                 let relativeTime = item.querySelector('.info')?.innerText;
@@ -74,7 +74,7 @@ async function crawlNews() {
         try {
             await insertNews(article.thumb, article.title, article.content, 0, article.created, article.url);
         } catch (error) {
-            console.log(`중복된 기사: ${article.title}`);
+            console.log(`Insert error: ${article.title}`);
         }
     }
 

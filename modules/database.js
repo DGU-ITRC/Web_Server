@@ -3,17 +3,17 @@ const sqlite3 = require('sqlite3').verbose();
 
 // Connect to the SQLite database located in the root directory
 const db = new sqlite3.Database(path.resolve(__dirname, '../db.sqlite'), (err) => {
-  if (err) {
-    console.error('Could not connect to database', err);
-  } else {
-    console.log('Connected to SQLite database');
-  }
+    if (err) {
+        console.error('Could not connect to database', err);
+    } else {
+        console.log('Connected to SQLite database');
+    }
 });
 
 // Create the tables
 db.serialize(() => {
-  // Create the 'news' table
-  db.run(`
+    // Create the 'news' table
+    db.run(`
     CREATE TABLE IF NOT EXISTS news (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       thumb TEXT,
@@ -25,8 +25,8 @@ db.serialize(() => {
     )
   `);
 
-  // Create the 'communication' table
-  db.run(`
+    // Create the 'communication' table
+    db.run(`
     CREATE TABLE IF NOT EXISTS communication (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       method TEXT,
@@ -38,8 +38,8 @@ db.serialize(() => {
     )
   `);
 
-  // Create the 'server' table
-  db.run(`
+    // Create the 'server' table
+    db.run(`
     CREATE TABLE IF NOT EXISTS server (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       name TEXT,
@@ -47,8 +47,8 @@ db.serialize(() => {
     )
   `);
 
-  // Create the 'log' table
-  db.run(`
+    // Create the 'log' table
+    db.run(`
     CREATE TABLE IF NOT EXISTS log (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       name TEXT,
