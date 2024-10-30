@@ -42,11 +42,13 @@ schedule.scheduleJob('0 0 * * *', async () => {
     }
 });
 //프로그램 실행시 크롤링 한번 동작
-try{
-    await crawlNews();
-    console.error("최초 크롤링 완료");
-} catch(error) {
-    console.error("최초 크롤링 중 에러 발생", error);
+async () => {
+    try {
+        await crawlNews();
+        console.error("최초 크롤링 완료");
+    } catch (error) {
+        console.error("최초 크롤링 중 에러 발생", error);
+    }
 }
 
 
