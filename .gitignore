@@ -4,6 +4,9 @@ package-lock.json
 *.log
 *.gz
 
+#key
+*.json
+dgu-itrc-fd5238a5b133.json
 #db
 db.sqlite
 *.db
