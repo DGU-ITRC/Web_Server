@@ -14,6 +14,7 @@ async function crawlNews() {
         const url = `https://search.naver.com/search.naver?where=news&sm=tab_jum&query=${encodeURIComponent(query)}&start=${pageIndex * 10 - 9}`;
 
         await page.goto(url, { waitUntil: 'networkidle2' });
+        await page.waitForSelector('.dsc_thumb img', { visible: true });
 
         const newArticles = await page.evaluate(() => {
             const results = [];
@@ -23,26 +24,31 @@ async function crawlNews() {
                 const title = item.querySelector('.news_tit')?.textContent;
                 let thumb = null;
 
-                // 두 번째 img 태그에서 썸네일을 가져옴
-                const imgs = item.querySelectorAll('img');
-                if (imgs.length > 1) {
-                    let thumbUrl = imgs[1].src;
-                    if (thumbUrl) {
-                        // 확장자까지 잘라내기 (type= 부분 제거)
-                        const match = thumbUrl.match(/(.*\.(jpg|jpeg|png|gif))/i);
-                        if (match) {
-                            thumb = match[1];
-                        }
+                const thumbElement = item.querySelector('.dsc_thumb img');
+                if (thumbElement) {
+                    thumb = thumbElement.src;
+                    const match = thumb.match(/(.*\.(jpg|jpeg|png|gif))/i);
+                    if (match) {
+                        thumb = match[1];
+                    } else {
+                        thumb = null;
                     }
                 }
 
                 const content = item.querySelector('.dsc_txt_wrap')?.textContent?.substring(0, 200);
                 const url = item.querySelector('.news_tit')?.href?.trim(); // URL 공백 제거
 
-                // "몇 시간 전"을 계산해서 created 값을 설정
-                let relativeTime = item.querySelector('.info')?.innerText;
+                // "몇 시간 전" 정보를 여러 info 요소에서 찾아서 필터링
+                const infoElements = item.querySelectorAll('.info');
+                let relativeTime = null;
+                infoElements.forEach(infoElement => {
+                    const text = infoElement.innerText;
+                    if (text.includes('일 전') || text.includes('시간 전') || text.includes('분 전') || text.includes('초 전')) {
+                        relativeTime = text;  // 시간 정보가 담긴 요소 찾기
+                    }
+                });
+                // 시간 계산
                 let created = Date.now();
-
                 if (relativeTime) {
                     if (relativeTime.includes('일 전')) {
                         const daysAgo = parseInt(relativeTime.match(/\d+/)?.[0], 10);

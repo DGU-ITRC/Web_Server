@@ -6,3 +6,5 @@ package-lock.json
 
 #db
 db.sqlite
+*.db
+*.sqlite

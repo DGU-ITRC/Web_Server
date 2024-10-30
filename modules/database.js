@@ -2,7 +2,7 @@ const path = require('path');
 const sqlite3 = require('sqlite3').verbose();
 
 // Connect to the SQLite database located in the root directory
-const db = new sqlite3.Database(path.resolve(__dirname, '../db.sqlite'), (err) => {
+const db = new sqlite3.Database(path.resolve(__dirname, '../database/db.sqlite'), (err) => {
     if (err) {
         console.error('Could not connect to database', err);
     } else {
