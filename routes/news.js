@@ -1,9 +1,9 @@
 var express = require('express');
 var router = express.Router();
-const { crawlNews } = require('../modules/crawl'); // 크롤링 모듈
 const { getNews, getHotNews, incrementNewsCount } = require('../modules/newsdb'); // DB 모듈
 
 // 뉴스 크롤링 실행 (GET /api/news/crawl)
+/*
 router.get('/crawl', async (req, res, next) => {
     try {
         const articles = await crawlNews();
@@ -13,6 +13,7 @@ router.get('/crawl', async (req, res, next) => {
         next(error); // 에러 핸들링 미들웨어로 전달
     }
 });
+*/
 
 // 저장된 뉴스 데이터 최신 20개 확인 (GET /api/news/new)
 router.get('/new', async (req, res, next) => {
