@@ -10,9 +10,9 @@ var indexRouter = require("./routes/index");
 var newsRouter = require("./routes/news");
 var communicationRouter = require("./routes/communication");
 var serverRouter = require("./routes/server");
+var analyticsRouter = require("./routes/analytics");
 
 var app = express();
-
 app.use(
     "/public/images",
     express.static(path.join(__dirname, "public/images"))
@@ -33,6 +33,7 @@ app.use("/", indexRouter);
 app.use("/api/news", newsRouter);
 app.use("/api/communication", communicationRouter);
 app.use("/api/server", serverRouter);
+app.use("/api/analytics", analyticsRouter);
 
 //크롤링 세팅
 const { crawlNews } = require("./modules/crawl");

@@ -31,8 +31,12 @@ async function getVisitorData() {
     console.log(responseToday);
     console.log(responseTotal);
 
-    const todayVisitors = responseToday.rows[0].metricValues[0].value;
-    const totalVisitors = responseTotal.rows[0].metricValues[0].value;
+    const todayVisitors = parseInt(
+        responseToday.rows?.[0]?.metricValues?.[0]?.value || 0
+    );
+    const totalVisitors = parseInt(
+        responseTotal.rows?.[0]?.metricValues?.[0]?.value || 0
+    );
 
     return { today: todayVisitors, total: totalVisitors };
 }
@@ -41,6 +45,7 @@ async function getVisitorData() {
 router.get("/", async (req, res) => {
     try {
         const data = await getVisitorData();
+        console.log(data);
         res.json(data);
     } catch (error) {
         console.warn("Error fetching analytics data");
